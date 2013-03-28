@@ -1,0 +1,43 @@
+/*
+ * jQuery Nivo Slider v2.5.2
+ * http://nivo.dev7studios.com
+ *
+ * Copyright 2011, Gilbert Pellegrom
+ * Free to use and abuse under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ * 
+ * March 2010
+ */
+
+
+#slider-container { width:735px; height:350px; margin-left:3px; margin-top:5px; }
+#slider { position:relative; width:735px; height:350px; background:#000000 url("../image/loading.gif") no-repeat 50% 50%; }
+#slider img {position:absolute;top:0px;left:0px;display:none;}
+#slider a { border:0; display:block;}
+
+/* The Nivo Slider styles */
+.nivoSlider {position:relative;}
+.nivoSlider img {position:absolute;top:0px;left:0px;}
+
+/* If an image is wrapped in a link */
+.nivoSlider a.nivo-imageLink {position:absolute;top:0px;left:0px;width:100%;height:100%;border:0;padding:0;margin:0;z-index:6;display:none;}
+
+/* The slices and boxes in the Slider */
+.nivo-slice {display:block;position:absolute;z-index:5;height:100%;}
+.nivo-box {display:block;position:absolute;z-index:5;}
+
+/* Caption styles */
+.nivo-caption { position:absolute; left:0px; bottom:20px; background-image:url("../image/bg-transparent2.png"); color:#fff; z-index:8; opacity:1.0!important;}
+.nivo-caption p { padding:5px 10px 5px 5px; margin:0; font:20px Arial, Tahoma, Times New Roman; color:#f4f4f4; font-weight:normal; }
+.nivo-caption a { display:inline !important; }
+.nivo-html-caption { display:none;}
+
+/* Direction nav styles (e.g. Next & Prev) */
+.nivo-directionNav a {display:block;width:1px;height:1px;background:url(../image/blank.gif) no-repeat;text-indent:-9999px;border:0;top:230px;position:absolute;z-index:100;}
+a.nivo-nextNav {background-position:-30px 0;right:-10px;cursor:pointer;}
+a.nivo-prevNav {left:-10px;cursor:pointer;}
+
+/* Control nav styles (e.g. 1,2,3...) */
+.nivo-controlNav {position:absolute;bottom:-19px;left:345px;z-index:100;}
+.nivo-controlNav a {display:block;width:16px;height:16px;background:url(../image/bullets.png) no-repeat;text-indent:-9999px;border:0;margin-right:3px;float:left;cursor:pointer;z-index:100;}
+.nivo-controlNav a.active {background-position: 0 -22px;}

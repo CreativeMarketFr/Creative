@@ -1,0 +1,342 @@
+<modification>
+    <id>Facebook Share Like Button - VQMod</id>
+      	<version>1.4</version>
+		<vqmver>2.1.7</vqmver>
+       	<author>www.terrytsang.com</author>		
+	   	<file name="catalog/view/theme/*/template/common/header.tpl">
+    		<operation>
+			<search position="after"><![CDATA[<body>]]></search>
+			<add><![CDATA[<?php 
+				if (!is_null($this->config->get('config_fb_sharelike_api_id')))
+				{ 
+					$fb_sharelike_api_id =  $this->config->get('config_fb_sharelike_api_id'); 
+				} 
+				else 
+				{ 
+					$fb_sharelike_api_id = '54854384568'; 
+				}
+				
+				if (!is_null($this->config->get('config_fb_sharelike_language')))
+				{ 
+					$fb_sharelike_language =  $this->config->get('config_fb_sharelike_language'); 
+				} 
+				else 
+				{ 
+					$fb_sharelike_language = 'en_GB'; 
+				}
+				
+			?>
+			<div id="fb-root"></div>
+			<script>(function(d, s, id) {
+  			var js, fjs = d.getElementsByTagName(s)[0];
+  			if (d.getElementById(id)) return;
+  			js = d.createElement(s); js.id = id;
+  			js.src = "//connect.facebook.net/<?php echo $fb_sharelike_language; ?>/all.js#xfbml=1&appId=<?php echo $fb_sharelike_api_id; ?>";
+  			fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));</script>
+   			]]></add>
+			</operation>
+		</file>		
+
+		<file name="catalog/view/theme/*/template/product/product.tpl">
+    		<operation>
+			<search position="before"><![CDATA[<div class="description">]]></search>
+			<add><![CDATA[<?php 
+				if ($this->config->get('config_fb_sharelike_enabled'))
+				{ 
+					$fb_sharelike_enabled =  true; 
+				} 
+				else 
+				{ 
+					$fb_sharelike_enabled = false; 
+				}
+				
+				if ($this->config->get('config_fb_sharelike_sentbtn'))
+				{ 
+					$fb_sharelike_sentbtn=  'true'; 
+				} 
+				else 
+				{ 
+					$fb_sharelike_sentbtn = 'false'; 
+				}
+
+				if (!is_null($this->config->get('config_fb_sharelike_liketext')) && $this->config->get('config_fb_sharelike_liketext') == "recommend")
+				{ 
+					$fb_sharelike_liketext = ' data-action="'.$this->config->get('config_fb_sharelike_liketext').'"'; 
+				} 
+				else 
+				{ 
+					$fb_sharelike_liketext= ''; 
+				}
+				
+				if (!is_null($this->config->get('config_fb_sharelike_width')))
+				{ 
+					$fb_sharelike_width = $this->config->get('config_fb_sharelike_width'); 
+				} 
+				else 
+				{ 
+					$fb_sharelike_width = '450'; 
+				}
+				
+				if($fb_sharelike_enabled){
+			?>
+			<div class="fb-like" data-send="<?php echo $fb_sharelike_sentbtn; ?>" data-layout="button_count" data-width="<?php echo $fb_sharelike_width; ?>" data-show-faces="true"<?php echo $fb_sharelike_liketext; ?>></div><div>&nbsp;</div>
+			<?php } ?>   ]]></add>
+			</operation>
+		</file>	
+
+		<file name="admin/language/*/setting/setting.php">
+    		<operation>
+				<search position="before"><![CDATA[// Text]]></search>
+				<add><![CDATA[$_['tab_fbsharelike']         = 'Facebook ShareLike';]]></add>
+			</operation>
+			<operation>
+				<search position="before"><![CDATA[// Error]]></search>
+				<add><![CDATA[
+				$_['entry_fb_sharelike_enabled']   = 'Show Facebook Share Like Buttons:';
+				$_['entry_fb_sharelike_api_id']    = 'Your Facebook App ID:';
+				$_['entry_fb_sharelike_sentbtn']   = 'Show Send Button:';
+				$_['entry_fb_sharelike_liketext']   = 'The Verb to Display on The Like Button:';
+				$_['entry_fb_sharelike_width']     = 'Width:';
+				$_['entry_fb_sharelike_language']  = 'Language:';
+				]]>
+				</add>
+			</operation>
+			<operation>
+				<search position="before"><![CDATA[?>]]></search>
+				<add><![CDATA[$_['error_fb_sharelike_width']     = 'Facebook ShareLike Button width required!';]]></add>
+			</operation>
+		</file>
+
+		<file name="admin/controller/setting/setting.php">
+    		<operation>
+				<search position="before"><![CDATA[$this->data['button_save'] = $this->language->get('button_save');]]></search>
+				<add><![CDATA[
+				$this->data['entry_fb_sharelike_enabled'] = $this->language->get('entry_fb_sharelike_enabled');
+				$this->data['entry_fb_sharelike_sentbtn'] = $this->language->get('entry_fb_sharelike_sentbtn');
+				$this->data['entry_fb_sharelike_api_id'] = $this->language->get('entry_fb_sharelike_api_id');
+				$this->data['entry_fb_sharelike_liketext'] = $this->language->get('entry_fb_sharelike_liketext');
+				$this->data['entry_fb_sharelike_language'] = $this->language->get('entry_fb_sharelike_language');
+				$this->data['entry_fb_sharelike_width'] = $this->language->get('entry_fb_sharelike_width');]]>
+				</add>
+			</operation>
+			<operation>
+				<search position="after"><![CDATA[$this->data['tab_server'] = $this->language->get('tab_server');]]></search>
+				<add><![CDATA[$this->data['tab_fbsharelike'] = $this->language->get('tab_fbsharelike');]]></add>
+			</operation>
+			<operation>
+				<search position="before"><![CDATA[$this->data['breadcrumbs'] = array();]]></search>
+				<add><![CDATA[
+				if (isset($this->error['fb_sharelike_width'])) {
+					$this->data['error_fb_sharelike_width'] = $this->error['fb_sharelike_width'];
+				} else {
+					$this->data['error_fb_sharelike_width'] = '';
+				}]]>
+				</add>
+			</operation>
+			<operation>
+				<search position="before"><![CDATA[$this->template = 'setting/setting.tpl';]]></search>
+				<add><![CDATA[
+				$this->data['liketexts']['like'] = 'like';
+				$this->data['liketexts']['recommend'] = 'recommend';
+
+				$this->data['fb_languages']['en_GB'] = 'English (UK)';
+				$this->data['fb_languages']['af_ZA'] = 'Afrikaans';
+				$this->data['fb_languages']['sq_AL'] = 'Albanian';
+				$this->data['fb_languages']['ar_AR'] = 'Arabic';
+				$this->data['fb_languages']['hy_AM'] = 'Armenian';
+				$this->data['fb_languages']['az_AZ'] = 'Azerbaijani';
+				$this->data['fb_languages']['eu_ES'] = 'Basque';
+				$this->data['fb_languages']['be_BY'] = 'Belarusian';
+				$this->data['fb_languages']['bn_IN'] = 'Bengali';
+				$this->data['fb_languages']['bs_BA'] = 'Bosnian';
+				$this->data['fb_languages']['bg_BG'] = 'Bulgarian';
+				$this->data['fb_languages']['ca_ES'] = 'Catalan';
+				$this->data['fb_languages']['hr_HR'] = 'Croatian';
+				$this->data['fb_languages']['cs_CZ'] = 'Czech';
+				$this->data['fb_languages']['da_DK'] = 'Danish';
+				$this->data['fb_languages']['nl_NL'] = 'Dutch';
+				$this->data['fb_languages']['en_PI'] = 'English (Pirate)';
+				$this->data['fb_languages']['en_UD'] = 'English (Upside Down)';
+				$this->data['fb_languages']['en_US'] = 'English (US)';
+				$this->data['fb_languages']['eo_EO'] = 'Esperanto';
+				$this->data['fb_languages']['et_EE'] = 'Estonian';
+				$this->data['fb_languages']['fo_FO'] = 'Faroese';
+				$this->data['fb_languages']['tl_PH'] = 'Filipino';
+				$this->data['fb_languages']['fi_FI'] = 'Finnish';
+				$this->data['fb_languages']['fr_CA'] = 'French (Canada)';
+				$this->data['fb_languages']['fr_FR'] = 'French (France)';
+				$this->data['fb_languages']['fy_NL'] = 'Frisian';
+				$this->data['fb_languages']['gl_ES'] = 'Galician';
+				$this->data['fb_languages']['ka_GE'] = 'Georgian';
+				$this->data['fb_languages']['de_DE'] = 'German';
+				$this->data['fb_languages']['el_GR'] = 'Greek';
+				$this->data['fb_languages']['he_IL'] = 'Hebrew';
+				$this->data['fb_languages']['hi_IN'] = 'Hindi';
+				$this->data['fb_languages']['hu_HU'] = 'Hungarian';
+				$this->data['fb_languages']['is_IS'] = 'Icelandic';
+				$this->data['fb_languages']['id_ID'] = 'Indonesian';
+				$this->data['fb_languages']['it_IT'] = 'Italian';
+				$this->data['fb_languages']['km_KH'] = 'Khmer';
+				$this->data['fb_languages']['ko_KR'] = 'Korean';
+				$this->data['fb_languages']['ku_TR'] = 'Kurdish';
+				$this->data['fb_languages']['ja_JP'] = 'Japanese';
+				$this->data['fb_languages']['la_VA'] = 'Latin';
+				$this->data['fb_languages']['lv_LV'] = 'Latvian';
+				$this->data['fb_languages']['lt_LT'] = 'Lithuanian';
+				$this->data['fb_languages']['fb_LT'] = 'Leet Speak';
+				$this->data['fb_languages']['mk_MK'] = 'Macedonian';
+				$this->data['fb_languages']['ml_IN'] = 'Malayalam';
+				$this->data['fb_languages']['ms_MY'] = 'Malay';
+				$this->data['fb_languages']['ne_NP'] = 'Nepali';
+				$this->data['fb_languages']['nb_NO'] = 'Norwegian (bokmal)';
+				$this->data['fb_languages']['nn_NO'] = 'Norwegian (nynorsk)';
+				$this->data['fb_languages']['ps_AF'] = 'Pashto';
+				$this->data['fb_languages']['fa_IR'] = 'Persian';
+				$this->data['fb_languages']['pl_PL'] = 'Polish';
+				$this->data['fb_languages']['pt_BR'] = 'Portuguese (Brazil)';
+				$this->data['fb_languages']['pt_PT'] = 'Portuguese (Portugal)';
+				$this->data['fb_languages']['pa_IN'] = 'Punjabi';
+				$this->data['fb_languages']['ro_RO'] = 'Romanian';
+				$this->data['fb_languages']['ru_RU'] = 'Russian';
+				$this->data['fb_languages']['sr_RS'] = 'Serbian';
+				$this->data['fb_languages']['zh_CN'] = 'Simplified Chinese (China)';
+				$this->data['fb_languages']['sk_SK'] = 'Slovak';
+				$this->data['fb_languages']['sl_SI'] = 'Slovenian';
+				$this->data['fb_languages']['es_ES'] = 'Spanish (Spain)';
+				$this->data['fb_languages']['es_LA'] = 'Spanish';
+				$this->data['fb_languages']['sw_KE'] = 'Swahili';
+				$this->data['fb_languages']['sv_SE'] = 'Swedish';
+				$this->data['fb_languages']['ta_IN'] = 'Tamil';
+				$this->data['fb_languages']['sw_KE'] = 'Telugu';
+				$this->data['fb_languages']['th_TH'] = 'Thai';
+				$this->data['fb_languages']['zh_HK'] = 'Traditional Chinese (Hong Kong)';
+				$this->data['fb_languages']['zh_TW'] = 'Traditional Chinese (Taiwan)';
+				$this->data['fb_languages']['tr_TR'] = 'Turkish';
+				$this->data['fb_languages']['uk_UA'] = 'Ukrainian';
+				$this->data['fb_languages']['vi_VN'] = 'Vietnamese';
+				$this->data['fb_languages']['cy_GB'] = 'Welsh';
+		
+				if (isset($this->request->post['config_fb_sharelike_enabled'])) {
+					$this->data['config_fb_sharelike_enabled'] = $this->request->post['config_fb_sharelike_enabled'];
+				} else {
+					$this->data['config_fb_sharelike_enabled'] = $this->config->get('config_fb_sharelike_enabled');
+				}
+		
+				if (isset($this->request->post['config_fb_sharelike_sentbtn'])) {
+					$this->data['config_fb_sharelike_sentbtn'] = $this->request->post['config_fb_sharelike_sentbtn'];
+				} else {
+					$this->data['config_fb_sharelike_sentbtn'] = $this->config->get('config_fb_sharelike_sentbtn');
+				}
+		
+				if (isset($this->request->post['config_fb_sharelike_api_id'])) {
+					$this->data['config_fb_sharelike_api_id'] = $this->request->post['config_fb_sharelike_api_id'];
+				} else {
+					$this->data['config_fb_sharelike_api_id'] = $this->config->get('config_fb_sharelike_api_id');
+				}
+		
+				if (isset($this->request->post['config_fb_sharelike_liketext'])) {
+					$this->data['config_fb_sharelike_liketext'] = $this->request->post['config_fb_sharelike_liketext'];
+				} else {
+					$this->data['config_fb_sharelike_liketext'] = $this->config->get('config_fb_sharelike_liketext');
+				}
+		
+				if (isset($this->request->post['config_fb_sharelike_language'])) {
+					$this->data['config_fb_sharelike_language'] = $this->request->post['config_fb_sharelike_language'];
+				} else {
+					$this->data['config_fb_sharelike_language'] = $this->config->get('config_fb_sharelike_language');
+				}
+		
+				if (isset($this->request->post['config_fb_sharelike_width'])) {
+					$this->data['config_fb_sharelike_width'] = $this->request->post['config_fb_sharelike_width'];
+				} else {
+					$this->data['config_fb_sharelike_width'] = $this->config->get('config_fb_sharelike_width');
+				}
+				]]>
+				</add>
+			</operation>
+			<operation>
+				<search position="before"><![CDATA[if (!$this->error) {]]></search>
+				<add><![CDATA[if (!$this->request->post['config_fb_sharelike_width']) {
+					$this->error['fb_sharelike_width'] = $this->language->get('error_fb_sharelike_width');
+				}
+				]]>
+				</add>
+			</operation>
+		</file>
+
+		<file name="admin/view/template/setting/setting.tpl">
+    		<operation>
+				<search position="replace"><![CDATA[<a href="#tab-server">]]></search>
+				<add><![CDATA[<a href="#tab-fbsharelike"><?php echo $tab_fbsharelike; ?></a><a href="#tab-server">]]></add>
+			</operation>
+			<operation>
+				<search position="before"><![CDATA[<div id="tab-server">]]></search>
+				<add><![CDATA[<div id="tab-fbsharelike">
+          		<table class="form">
+            	<tr>
+            		<td><?php echo $entry_fb_sharelike_enabled; ?></td>
+              <td><?php if ($config_fb_sharelike_enabled) { ?>
+                <input type="radio" name="config_fb_sharelike_enabled" value="1" checked="checked" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_fb_sharelike_enabled" value="0" />
+                <?php echo $text_no; ?>
+                <?php } else { ?>
+                <input type="radio" name="config_fb_sharelike_enabled" value="1" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_fb_sharelike_enabled" value="0" checked="checked" />
+                <?php echo $text_no; ?>
+                <?php } ?></td>
+            </tr>
+            <tr>
+              <td><?php echo $entry_fb_sharelike_sentbtn; ?></td>
+              <td><?php if ($config_fb_sharelike_sentbtn) { ?>
+                <input type="radio" name="config_fb_sharelike_sentbtn" value="1" checked="checked" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_fb_sharelike_sentbtn" value="0" />
+                <?php echo $text_no; ?>
+                <?php } else { ?>
+                <input type="radio" name="config_fb_sharelike_sentbtn" value="1" />
+                <?php echo $text_yes; ?>
+                <input type="radio" name="config_fb_sharelike_sentbtn" value="0" checked="checked" />
+                <?php echo $text_no; ?>
+                <?php } ?></td>
+            </tr>
+			<tr>
+            <td><?php echo $entry_fb_sharelike_liketext; ?></td>
+            <td><select name="config_fb_sharelike_liketext">
+                <?php foreach ($liketexts as $liketext) { ?>
+                <?php if ($liketext == $config_fb_sharelike_liketext) { ?>
+                <option value="<?php echo $liketext; ?>" selected="selected"><?php echo $liketext; ?></option>
+                <?php } else { ?>
+                <option value="<?php echo $liketext; ?>"><?php echo $liketext; ?></option>
+                <?php } ?>
+                <?php } ?>
+              </select></td>
+			</tr>
+			<tr>
+            <td><?php echo $entry_fb_sharelike_language; ?></td>
+            <td><select name="config_fb_sharelike_language">
+                <?php foreach ($fb_languages as $key_language => $fb_language) { ?>
+                <?php if ($key_language == $config_fb_sharelike_language) { ?>
+                <option value="<?php echo $key_language; ?>" selected="selected"><?php echo $fb_language; ?></option>
+                <?php } else { ?>
+                <option value="<?php echo $key_language; ?>"><?php echo $fb_language; ?></option>
+                <?php } ?>
+                <?php } ?>
+              </select></td>
+			</tr>
+            <tr>
+              <td><span class="required">*</span> <?php echo $entry_fb_sharelike_width; ?></td>
+              <td><input type="text" name="config_fb_sharelike_width" value="<?php echo $config_fb_sharelike_width; ?>" />
+                <?php if ($error_fb_sharelike_width) { ?>
+                <span class="error"><?php echo $error_fb_sharelike_width; ?></span>
+                <?php } ?></td>
+            </tr>
+          		</table>
+        		</div>
+        		]]>
+        		</add>
+		</operation>
+	</file>
+</modification>

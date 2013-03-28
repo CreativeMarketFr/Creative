@@ -1,0 +1,6 @@
+ul { margin-left: 0px; }
+ol { margin-left:0px; }
+.productcol { width:268px; margin:3px 0px 0 10px; }
+.productcol .product-details ul { margin-left:0px; }
+#latest-products .latest { float:left; margin:7px 10px 6px 0; }
+.category-info .image {margin:4px 15px 0 0;}
